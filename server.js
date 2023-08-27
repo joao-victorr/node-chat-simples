@@ -7,8 +7,8 @@ const app = express();
 const server =http.createServer(app);
 const io = socketIO(server);
 
-
-server.listen(3000);
+const port = process.env.PORT;
+server.listen(port);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
