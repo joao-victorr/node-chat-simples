@@ -2,36 +2,39 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketIO = require('socket.io');
+const dotenv = require('dotenv');
+
 
 const app = express();
 const server =http.createServer(app);
 const io = socketIO(server);
 
+dotenv.config();
 
-server.listen(3000);
+server.listen(process.env.PORT);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 let connectedUser = [];
 
 io.on('connection', (socket) => {
+    console.log("conecção detectada")
 
-    socket.on('join-request', (userName) => {
-        console.log("New connetion detect")
-        socket.userName = userName;
-        connectedUser.push(userName);
-        console.log(connectedUser);
+    socket.on('join-request', (User) => {
+        socket.userName = User.name;
+        connectedUser.push(User.name);
+        console.log(connectedUser)
 
-        socket.emit('user-ok', connectedUser);
+        socket.emit('user-ok',  connectedUser);
+
         socket.broadcast.emit('list-update', {
-            joined: userName,
+            joined: User.name,
             list: connectedUser
         });
     });
 
     socket.on('disconnect', () => {
         connectedUser = connectedUser.filter(u => u != socket.userName);
-        console.log(connectedUser);
 
         socket.broadcast.emit('list-update', {
             left: socket.userName,
@@ -39,13 +42,15 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('send-msg', (txt) => {
-        let obj = {
-            userName: socket.userName,
-            message: txt
-        }
-        socket.broadcast.emit('show-msg', obj);
+    socket.on('send-message', (msg) => {
+        
+        socket.broadcast.emit('show-message', {
+            
+            userMessage: socket.userName,
+            msgNew: msg
 
-    })
+        });
+    });
+
 
 })
