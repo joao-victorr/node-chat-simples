@@ -1,13 +1,20 @@
 
-
-
 let socket = io();
 
-let User = {
-    id: "",
-    name: "",
-    email: ""
+
+const logged = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+    if (user != null) {
+        document.getElementById('email').value = "";
+        document.getElementById('password').value = "";
+        document.title = `Chat (${user.name})`;
+        socket.emit('join-request', user);
+    }
 }
+
+logged()
+  
 
 let userList = "";
 
@@ -20,12 +27,19 @@ document.getElementById('email').focus();
 
 
 
+
 function renderUserList() {
     let ul = document.querySelector(".userList")
     ul.innerHTML = "";
 
     userList.forEach(e => {
-        if(e === User.name) {
+        console.log(e);
+        
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        console.log(user)
+
+        if(e === user.name) {
             ul.innerHTML += `<li class="me"> ${e} <span>You</li>`;
         } else {
             ul.innerHTML += `<li> ${e} </li>`;
@@ -34,7 +48,7 @@ function renderUserList() {
 
 }
 
-function addMessage(type, user, msg) {
+function addMessage(type, userName, msg) {
     let ul = document.querySelector(".chatList")
     
     switch (type) {
@@ -42,11 +56,12 @@ function addMessage(type, user, msg) {
             ul.innerHTML += `<li class="m-status">${msg}</li>`;
             break;
         case "msg":
+            const user = JSON.parse(localStorage.getItem("user"))
 
-            if(user === User.name) {
-                ul.innerHTML += `<li class="m-txt"><span class="me">${user}</span> ${msg}`;
+            if(userName === user.name) {
+                ul.innerHTML += `<li class="m-txt"><span class="me">${user.name}</span> ${msg}`;
             } else {
-                ul.innerHTML += `<li class="m-txt"><span>${user}</span> ${msg}`;
+                ul.innerHTML += `<li class="m-txt"><span>${user.name}</span> ${msg}`;
             }
     
         default:
@@ -59,12 +74,14 @@ function addMessage(type, user, msg) {
 document.getElementById('login').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const form = event.target;
 
-    const url = 'http://localhost:10000/login';
+    const email = form.email.value;
+    const password = form.password.value;
 
-    const userData = {
+    const url = 'https://node-chat-simples.onrender.com/login';
+
+    const data = {
         email,
         password
     }
@@ -74,21 +91,19 @@ document.getElementById('login').addEventListener('submit', async function(event
         headers: {
             'content-type': 'application/json'
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(data)
     })
     .then((res) => res.json())
     .then((data) => {
-        if (data.id) {
-            User.id = data.id;
-            User.name = data.name;
+        if (data.user && data.token) {
+
+            localStorage.setItem('user', JSON.stringify(data.user));
 
             document.getElementById('email').value = "";
             document.getElementById('password').value = "";
+            document.title = `Chat (${data.user.name})`;
 
-            document.title = `Chat (${User.name})`;
-            
-
-            socket.emit('join-request', User);
+            socket.emit('join-request', data.user);
 
 
         } else {
@@ -128,12 +143,14 @@ socket.on('list-update', (data) => {
 
 
 document.querySelector("#chatTextInput").addEventListener("keyup", (e) => {
+    console.log(e)
 
     if(e.keyCode === 13) {
         let txt = document.getElementById("chatTextInput").value.trim();
 
         if(txt != "") {
-            addMessage("msg", User.name, txt)
+            const user = JSON.parse(localStorage.getItem("user"))
+            addMessage("msg", user.name, txt)
             document.getElementById("chatTextInput").value = "";
 
             socket.emit("send-message", txt)
