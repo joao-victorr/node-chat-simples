@@ -8,7 +8,7 @@ export const ErrorMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(error.message)
+  console.log(error)
 
   const statusCode = error.statusCode ?? 500;
   const message = error.statusCode ? error.message : "Inexpected Server Error";

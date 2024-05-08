@@ -21,6 +21,13 @@ export class UserController {
       new BadResquestError("Data not found")
     }
 
+    const verifyUser = await prismaClient.users.findUnique({where: { email: userData.email }})
+
+    
+    if(verifyUser) {
+      throw new ApiError("Existing user", 400)
+    }
+
     const passwordHash = await bcrypt.hash(userData.password, 10) 
 
     const newUser = await prismaClient.users.create({
@@ -36,7 +43,7 @@ export class UserController {
       }
     });   
 
-    return res.status(201).json({data: newUser})
+    return res.status(201).json({data: newUser});
   }
 
 }

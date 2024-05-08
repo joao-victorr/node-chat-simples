@@ -1,5 +1,12 @@
 
 let socket = io();
+const createAccount = document.querySelector('#createAccount');
+const buttonLogin = document.getElementById('login-form')
+const inputEmail = document.getElementById('email');
+const inputName = document.getElementById('name');
+const inputPassword = document.getElementById('password');
+let loginPage = document.querySelector("#loginPage");
+let chatPage = document.querySelector("#chatPage");
 
 
 const logged = () => {
@@ -14,12 +21,21 @@ const logged = () => {
 }
 
 logged()
+
+createAccount.addEventListener('click', () => {
+    document.getElementById('name').classList.toggle('hidden');
+    document.querySelector('.title').classList.toggle('create');
+    document.querySelector('.forgotPassword').classList.toggle('create');
+    buttonLogin.classList.toggle('create');
+    createAccount.classList.toggle('create');
+    buttonLogin.value = buttonLogin.value == "1" ? "0" : "1"
+})
+
   
 
 let userList = "";
 
-let loginPage = document.querySelector("#loginPage");
-let chatPage = document.querySelector("#chatPage");
+
 
 loginPage.style.display = "flex";
 chatPage.style.display = "none";
@@ -71,13 +87,42 @@ function addMessage(type, userName, msg) {
 
 
 
-document.getElementById('login').addEventListener('submit', async function(event) {
-    event.preventDefault();
+buttonLogin.addEventListener('click', async () => {
 
-    const form = event.target;
+    if (buttonLogin.value === "1") {
+        const email = inputEmail.value;
+        const password = inputPassword.value;
+        const name = inputName.value;
 
-    const email = form.email.value;
-    const password = form.password.value;
+        if(!email || !password || !name) {
+            alert("Preencha todos os campos")
+            return
+        }
+
+        const url = 'https://node-chat-simples.onrender.com/user';
+        const data = {
+            email,
+            password,
+            name
+        }
+        await fetch(url, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if(data.email) {
+                window.location.reload()
+            }
+        })
+        
+    }
+
+    const email = inputEmail.value;
+    const password = inputPassword.value;
 
     const url = 'https://node-chat-simples.onrender.com/login';
 

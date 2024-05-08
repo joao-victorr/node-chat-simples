@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
-    "dev": "nodemon -e ts,json src/server.ts",
+    "dev": "nodemon -e ts,json,html,css,js src/server.ts",
     "deploy": "tsc"
   },
   "keywords": [],

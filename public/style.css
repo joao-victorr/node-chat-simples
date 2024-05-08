@@ -30,11 +30,17 @@ body{
 }
 
 .title{
-    font-size: 2rem;
+    font-size: 2rem; 
     color: white;
     font-weight: bold;
     margin-bottom: 30px;
     text-align: center;
+    
+}
+
+.title::after {
+    content: "Log in";
+    transition: all 1s linear;
 }
 
 .container form {
@@ -87,10 +93,11 @@ color: rgba(0, 0, 0, 0.425);
 
 
 
-.container form a{
+.container form .forgotPassword{
     text-decoration: none;
     color: white;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.10);
+    transition: all 1s linear;
 }
 
 .container .links{
@@ -110,10 +117,7 @@ color: rgba(0, 0, 0, 0.425);
 footer{
     position: absolute;
     bottom: 10px;
-
-
 }
-
 
 .page {
     height: 100vh;
@@ -206,3 +210,49 @@ footer{
 
 }
 
+#name {
+    opacity: 0; /* Totalmente visível */
+    height: 0; 
+    padding: 0;
+    overflow: hidden;
+    transition: all 1s linear; /* Transição suave de 1.5 segundos para opacidade e altura */
+}
+
+#name.hidden {
+    opacity: 1;
+    height: auto; 
+    padding: 20px 13px; 
+
+    
+}
+
+.title.create::after {
+    content: "Create Account";
+}
+
+
+
+.forgotPassword.create {
+    display: none;
+}
+#createAccount {
+    background: none;
+    border: none;
+    color: #FFF;
+    font-size: 1rem;
+}
+#createAccount::after {
+    content: "Create Account";
+}
+
+#createAccount.create::after {
+    content: "Log In";
+}
+
+#login-form::after {
+    content: "Log In";
+}
+
+#login-form.create::after {
+    content: "Create Account";
+}

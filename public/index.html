@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina ThObrabo</title>
+    <title>Chat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Montserrat:wght@400;500;600;700;900&family=Noto+Sans:wght@400;700&family=Outfit:wght@300;400;500;700&family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -13,15 +13,16 @@
 
     <div id="loginPage" class="page">
         <div class="container">
-            <p class="title">Sign In</p>
-            <form id="login">
+            <p class="title"></p>
+            <form  id="login">
+                <input id="name" type="text" name="name" placeholder="Digite seu nome">
                 <input id="email" type="email" placeholder="Email" name="email">
                 <input id="password" type="password" placeholder="Password" name="password">
-                <a href="">Forget Password?</a>
-                <button id="login-form" type="submit" id="submit" >Sign In</button>
+                <a class="forgotPassword" href="">Forgot Password?</a>
+                <button id="login-form" value="0" type="button" id="submit" ></button>
             </form>
             <div class="links">
-                <a href="/cadastro">Create Account</a>
+                <button id="createAccount"></button>
             </div>
         </div>
     </div>
@@ -30,19 +31,8 @@
         <div id="chatArea">
             <ul class="chatList">
                 <li class="m-status">UTILIZE COM RESPONSIBILIDADE</li>
-                <!-- <li class="m-status">fulano saiu da sala</li>
-
-                <li class="m-txt" ><span class="me">Mitsuba</span> Opa tudo bem</li>
-                <li class="m-txt" ><span>Kou</span> Opa tudo bem</li>
-                <li class="m-txt" ><span>Yashiro</span> Opa tudo bem</li> -->
-
             </ul>
             <ul class="userList">
-                <!-- <li class="me">Mitsuba <span>You</span></li>
-                <li>Yashiro</li>
-                <li>Kou</li>
-                <li>Hanako</li>
-                <li>Tsukasa</li> -->
             </ul>
         </div>
         <div id="chatInput">
